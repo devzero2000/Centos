@@ -1,0 +1,23 @@
+--- a/support/apachectl.in
++++ b/support/apachectl.in
+@@ -93,9 +93,9 @@ function testconfig() {
+ # httpd is denied terminal access in SELinux, so run in the
+ # current context to get stdout from $HTTPD -t.
+ if test -x /usr/sbin/selinuxenabled && /usr/sbin/selinuxenabled; then
+-  runcon -- `id -Z` $HTTPD $OPTIONS -t
++  runcon -- `id -Z` $sbindir/httpd $OPTIONS -t
+ else
+-  $HTTPD $OPTIONS -t
++  $sbindir/httpd $OPTIONS -t
+ fi
+ ERROR=$?
+ }
+@@ -134,7 +134,7 @@ fullstatus)
+     $LYNX $STATUSURL
+     ;;
+ *)
+-    $HTTPD $OPTIONS "$@"
++    $sbindir/httpd $OPTIONS "$@"
+     ERROR=$?
+ esac
+ 

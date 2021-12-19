@@ -1,0 +1,16 @@
+diff --git a/support/apachectl.in b/support/apachectl.in
+index 29c2a3e..5d53313 100644
+--- a/support/apachectl.in
++++ b/support/apachectl.in
+@@ -116,7 +116,11 @@ configtest)
+     ;;
+ status)
+     checklynx
++    set -o pipefail
+     $LYNX $STATUSURL | awk ' /process$/ { print; exit } { print } '
++    if [[ $? != 0 ]] ; then
++        ERROR=3
++    fi
+     ;;
+ fullstatus)
+     checklynx

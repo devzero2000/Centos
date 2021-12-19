@@ -1,0 +1,13 @@
+diff --git a/support/apachectl.in b/support/apachectl.in
+index 47aeb3d..81ce9bf 100644
+--- a/support/apachectl.in
++++ b/support/apachectl.in
+@@ -102,7 +102,7 @@ ERROR=$?
+ 
+ case $ACMD in
+ start|stop|restart|graceful|graceful-stop)
+-    $HTTPD $OPTIONS -k $ARGV
++    $sbindir/httpd $OPTIONS -k $ARGV
+     ERROR=$?
+     ;;
+ startssl|sslstart|start-SSL)

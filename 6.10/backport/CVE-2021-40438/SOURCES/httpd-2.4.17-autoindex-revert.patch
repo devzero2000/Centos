@@ -1,0 +1,15 @@
+diff -Naur httpd-2.4.17/modules/generators/mod_autoindex.c httpd-2.4.17.new/modules/generators/mod_autoindex.c
+--- httpd-2.4.17/modules/generators/mod_autoindex.c	2015-10-06 14:36:36.000000000 +0200
++++ httpd-2.4.17.new/modules/generators/mod_autoindex.c	2015-10-16 13:14:16.043883282 +0200
+@@ -2274,10 +2274,7 @@
+     autoindex_config_rec *d;
+     int allow_opts;
+ 
+-    if (strcmp(r->handler,DIR_MAGIC_TYPE) && !AP_IS_DEFAULT_HANDLER_NAME(r->handler)) {
+-        return DECLINED;
+-    }
+-    if (r->finfo.filetype != APR_DIR) {
++    if(strcmp(r->handler,DIR_MAGIC_TYPE)) {
+         return DECLINED;
+     }
+ 

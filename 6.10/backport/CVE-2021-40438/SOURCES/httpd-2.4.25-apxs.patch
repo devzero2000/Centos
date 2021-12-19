@@ -1,0 +1,59 @@
+
+- use libdir from configuration.
+- only link against -lapr itself
+- also run restorecon on install module .so
+
+--- httpd-2.4.25/support/apxs.in.apxs
++++ httpd-2.4.25/support/apxs.in
+@@ -35,6 +35,7 @@
+ my $exec_prefix    = get_vars("exec_prefix");
+ my $datadir        = get_vars("datadir");
+ my $localstatedir  = get_vars("localstatedir");
++my $libdir         = get_vars("libdir");
+ my $CFG_TARGET     = get_vars("progname");
+ my $CFG_SYSCONFDIR = get_vars("sysconfdir");
+ my $CFG_CFLAGS     = join ' ', map { get_vars($_) }
+@@ -275,7 +276,7 @@
+     $data =~ s|%NAME%|$name|sg;
+     $data =~ s|%TARGET%|$CFG_TARGET|sg;
+     $data =~ s|%PREFIX%|$prefix|sg;
+-    $data =~ s|%INSTALLBUILDDIR%|$installbuilddir|sg;
++    $data =~ s|%LIBDIR%|$libdir|sg;
+ 
+     my ($mkf, $mods, $src) = ($data =~ m|^(.+)-=#=-\n(.+)-=#=-\n(.+)|s);
+ 
+@@ -453,11 +454,11 @@
+     my $ldflags = "$CFG_LDFLAGS";
+     if ($opt_p == 1) {
+         
+-        my $apr_libs=`$apr_config --cflags --ldflags --link-libtool --libs`;
++        my $apr_libs=`$apr_config --cflags --ldflags --link-libtool`;
+         chomp($apr_libs);
+         my $apu_libs="";
+         if ($apr_major_version < 2) {
+-            $apu_libs=`$apu_config --ldflags --link-libtool --libs`;
++            $apu_libs=`$apu_config --ldflags --link-libtool`;
+             chomp($apu_libs);
+         }
+         
+@@ -504,6 +505,9 @@
+ 	    push(@cmds, "$installbuilddir/instdso.sh SH_LIBTOOL='" .
+                  "$libtool' $f $CFG_LIBEXECDIR");
+ 	    push(@cmds, "chmod 755 $CFG_LIBEXECDIR/$t");
++	    if (-x "/sbin/restorecon") {
++		push(@cmds, "restorecon -v $CFG_LIBEXECDIR/$t");
++	    }
+         }
+ 
+         #   determine module symbolname and filename
+@@ -672,8 +676,8 @@
+ 
+ builddir=.
+ top_srcdir=%PREFIX%
+-top_builddir=%PREFIX%
+-include %INSTALLBUILDDIR%/special.mk
++top_builddir=%LIBDIR%/httpd
++include %LIBDIR%/httpd/build/special.mk
+ 
+ #   the used tools
+ APACHECTL=apachectl
