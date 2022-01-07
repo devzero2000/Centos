@@ -1,1 +1,1 @@
-d63e547454a4df474ae7b5ad3dbe8c80c82f2fadb7252a4a3355a60597eb921a  modsecurity_crs_19_log4j.conf
+af6a5964410d596059b84e03d2e7366382ec2500c84e6ebe9097d8624958dc4b  modsecurity_crs_19_log4j.conf
